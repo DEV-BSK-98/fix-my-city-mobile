@@ -1,15 +1,25 @@
-import { Slot, useRouter, useSegments } from "expo-router"
+import { Slot, SplashScreen, useRouter, useSegments } from "expo-router"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import SafeScreen from "../components/SafeScreen"
 import { StatusBar } from "expo-status-bar"
 import { useAuthStore } from "../store/authStore"
 import { useEffect, useState } from "react"
+import { useFonts } from "expo-font"
+
+SplashScreen.preventAutoHideAsync ()
 
 export default function RootLayout() {
   const router = useRouter()
   const segments = useSegments()
   const { checkAuth, token, user } = useAuthStore()
   const [isReady, setIsReady] = useState(false)
+
+  const loadedF = useFonts ({
+    "JetBrainsMono-Medium": require ("../assets/fonts/JetBrainsMono-Medium.ttf")
+  })
+  useEffect (() => {
+    if (loadedF) SplashScreen.hideAsync ()
+  }, [loadedF])
 
   useEffect(() => {
     // Run auth check on mount
