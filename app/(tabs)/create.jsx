@@ -9,10 +9,15 @@ import { View, Text, Platform, KeyboardAvoidingView, ScrollView, TouchableOpacit
 import styles from "../../styles/create"
 import { useAuthStore } from "../../store/authStore"
 import { API_URL } from "../../constants/api"
+import { useEffect } from "react"
 
 export default function CreateScreen() {
+    const [location, setLocation] = useState(null)
+    const [errorMsgLoc, setErrorMsgLoc] = useState(null);
+
     const [title, setTitle] = useState ("")
     const [caption, setCaption] = useState ("")
+    const [place, setPlace] = useState ("")
     const [rating, setRating] = useState (3)
     const [lat, setLat] = useState (0)
     const [lng, setLng] = useState (0)
@@ -83,7 +88,9 @@ export default function CreateScreen() {
                     title,
                     caption,
                     rating: rating.toString (),
-                    image: imgDataUrl
+                    image: imgDataUrl,
+                    lat,
+                    lng
                 })
             })
             const data = await response.json ()
@@ -91,6 +98,7 @@ export default function CreateScreen() {
             Alert.alert ("Success", "Your report submission was successful")
             setTitle ("")
             setCaption ("")
+            setPlace ("")
             setRating (3)
             setImage (null)
             setLng (0)
@@ -122,6 +130,24 @@ export default function CreateScreen() {
         }
         return <View style={styles.ratingContainer}>{stars}</View>
     }
+
+    const getLoc = async () => {
+        try {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsgLoc('Permission to access location was denied');
+                return;
+            }
+            let loc = await Location.getCurrentPositionAsync({});
+            setLat (loc.coords.latitude)
+            setLng (loc.coords.longitude)
+        } catch (error) {
+            setErrorMsgLoc(error.message);
+        }
+    }
+    useEffect (()=> {
+        getLoc ()
+    }, [])
     return (
         <KeyboardAvoidingView
             style={{
@@ -154,6 +180,25 @@ export default function CreateScreen() {
                                     placeholderTextColor={COLORS.placeholderText}
                                     value={title}
                                     onChangeText={setTitle}
+                                    autoCapitalize="none"
+                                />
+                            </View>
+                        </View>
+                        <View style={styles.formGroup}>
+                            <Text style={styles.label}>Report Place</Text>
+                            <View style={styles.inputContainer}>
+                                <Ionicons
+                                    name="pin-outline"
+                                    size={20}
+                                    color={COLORS.primary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Where Are You Reporting From"
+                                    placeholderTextColor={COLORS.placeholderText}
+                                    value={place}
+                                    onChangeText={setPlace}
                                     autoCapitalize="none"
                                 />
                             </View>

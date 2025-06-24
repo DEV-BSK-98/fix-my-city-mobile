@@ -16,7 +16,7 @@ const SignUp = () => {
     const [phone, setPhone] = useState ("")
     const [showPassword, setShowPassword] = useState (false)
 
-    const {user, isLoading, register, token } = useAuthStore ()
+    const {isLoading, register } = useAuthStore ()
     const handleSignUp  = async () => {
         const res = await register (
             password,
@@ -28,10 +28,6 @@ const SignUp = () => {
         )
         if (!res.success) Alert.alert ("Error", res.error)
     }
-
-    console.log('====================================');
-    console.log(user, token);
-    console.log('====================================');
     return (
         <ScrollView
             style={{
