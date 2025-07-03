@@ -96,6 +96,7 @@ export const useAuthStore = create ((set, get) => ({
             return {success: true}
         } catch (error) {
             console.log (`ERROR: ${error} During Login`)
+            return {success: false, error: error.message}
         } finally {
             set ({isLoading: false})
         }

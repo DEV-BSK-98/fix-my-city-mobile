@@ -7,16 +7,16 @@ import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
 
 import {
-  View,
-  Text,
-  Platform,
-  KeyboardAvoidingView,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Alert,
-  TextInput,
-  ActivityIndicator,
+    View,
+    Text,
+    Platform,
+    KeyboardAvoidingView,
+    ScrollView,
+    TouchableOpacity,
+    Image,
+    Alert,
+    TextInput,
+    ActivityIndicator,
 } from "react-native";
 
 import styles from "../../styles/create";
@@ -51,6 +51,7 @@ export default function CreateScreen() {
             const results = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ['images', 'videos'],
                 allowsEditing: true,
+                base64: true,
                 aspect: [4, 3],
                 quality: 1,
             });
@@ -157,8 +158,6 @@ export default function CreateScreen() {
         }else {
 
             Alert.alert("Success", "Your report submission was successful");
-
-            // Reset form
             setTitle("");
             setCaption("");
             setPlace("");

@@ -1,4 +1,3 @@
-// styles/home.styles.js
 import { StyleSheet } from "react-native"
 import COLORS from "../constants/colors"
 
@@ -15,7 +14,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         padding: 16,
-        paddingBottom: 80, 
+        paddingBottom: 80,
     },
     header: {
         marginBottom: 20,

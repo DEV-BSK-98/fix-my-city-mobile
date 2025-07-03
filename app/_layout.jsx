@@ -22,7 +22,6 @@ export default function RootLayout() {
   }, [loadedF])
 
   useEffect(() => {
-    // Run auth check on mount
     const init = async () => {
       await checkAuth()
       setIsReady(true)

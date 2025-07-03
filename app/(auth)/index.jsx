@@ -15,6 +15,9 @@ const Login = () => {
 
     const handleLogin  = async () => {
         const result = await login ({email, password})
+        console.log('====================================');
+        console.log(result);
+        console.log('====================================');
         if (!result.success) Alert.alert ("Error", result.error)
     }
 
