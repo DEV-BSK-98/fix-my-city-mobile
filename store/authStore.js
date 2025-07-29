@@ -141,16 +141,42 @@ export const useAuthStore = create ((set, get) => ({
             set({ isLoading: false });
         }
     },
+    // checkAuth: async () => {
+    //     try {
+    //         const token = await AsyncStorage.getItem ('token')
+    //         const userJson = await AsyncStorage.getItem ('user')
+    //         const user = JSON.parse (userJson)
+    //         set ({token, user})
+    //     } catch (err) {
+    //         console.log (`ERROR: ${err} while checking User Auth`)
+    //     }finally {
+    //         set({isCheckingAuth: false})
+    //     }
+    // },
     checkAuth: async () => {
         try {
-            const token = await AsyncStorage.getItem ('token')
-            const userJson = await AsyncStorage.getItem ('user')
-            const user = JSON.parse (userJson)
-            set ({token, user})
+            const token = await AsyncStorage.getItem('token');
+            const userJson = await AsyncStorage.getItem('user');
+
+            let user = null;
+
+            if (userJson) {
+                try {
+                    user = JSON.parse(userJson);
+                } catch (jsonErr) {
+                    console.log(`Invalid JSON in 'user': ${jsonErr}`);
+                }
+            }else{
+                await AsyncStorage.removeItem ("user")
+                await AsyncStorage.removeItem ("token")
+                set ({token: null, user: null})
+            }
+
+            set({ token, user });
         } catch (err) {
-            console.log (`ERROR: ${err} while checking User Auth`)
-        }finally {
-            set({isCheckingAuth: false})
+            console.log(`ERROR: ${err} while checking User Auth`);
+        } finally {
+            set({ isCheckingAuth: false });
         }
     },
     logOut: async () => {
